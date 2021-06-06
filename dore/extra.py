@@ -2,15 +2,18 @@
 __version__ = 0.001
 
 from .style import *
-from sysdmanager import SystemdManager as _sdm
-from psutil import process_iter as _ps
 from os import kill as _kill
 from os import getuid as _getuid
 from signal import SIGHUP as _SIGHUP
 from requests import Response as http_response
 from io import TextIOBase, BufferedIOBase, RawIOBase, IOBase
 from requests import get as _get
-from dbus.exceptions import DBusException as _DBusException
+from sys import platform
+
+if platform != 'darwin':
+    from sysdmanager import SystemdManager as _sdm
+    from psutil import process_iter as _ps
+    from dbus.exceptions import DBusException as _DBusException
 
 
 def proxy_works(proxies, url='https://google.com'):

@@ -37,9 +37,10 @@ DISCLAIMER -> I do not support or encourage any illegal stuff,
 and is not responsible for what you end up doing with dore.
 '''[1:-1]))
 
-_is_tor_active = is_active('tor.service')
-if _is_tor_active != None:  # It didn't throw `False`
-    if not _is_tor_active:
-        print(warn('TOR is not started on this device'))
-else:
-    print(info('INFO -> Make sure, your proxies are reachable first'))
+if platform != 'darwin':
+    _is_tor_active = is_active('tor.service')
+    if _is_tor_active != None:  # It didn't throw `False`
+        if not _is_tor_active:
+            print(warn('TOR is not started on this device'))
+    else:
+        print(info('INFO -> Make sure, your proxies are reachable first'))
