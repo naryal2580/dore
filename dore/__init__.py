@@ -34,7 +34,7 @@ banner(__version__)
 
 print(warn('''
 DISCLAIMER -> I do not support or encourage any illegal stuff,
-and is not responsible for what you end up doing with dore.
+and I am not responsible for what you end up doing with dore.
 '''[1:-1]))
 
 if platform != 'darwin':
