@@ -7,12 +7,12 @@ from os import getuid as _getuid
 from signal import SIGHUP as _SIGHUP
 from requests import Response as http_response
 from io import TextIOBase, BufferedIOBase, RawIOBase, IOBase
-from requests import get as _get
+from requests import head as _head
 from sys import platform
+from psutil import process_iter as _ps
 
 if platform != 'darwin':
     from sysdmanager import SystemdManager as _sdm
-    from psutil import process_iter as _ps
     from dbus.exceptions import DBusException as _DBusException
 
 
@@ -28,7 +28,7 @@ def proxy_works(proxies, url='https://google.com'):
             bool: Boolean, if proxy is working or not
     """
     try:
-        _get(
+        _head(
                 url,
                 proxies=proxies,
                 headers={
@@ -66,6 +66,8 @@ def is_active(service_name='tor.service', start=False):
         Returns:
             bool: Either the service is running or not
     """
+    if platform == 'darwin':
+        return
     try:
         if not _sdm().is_active(service_name):
             if start:
@@ -73,8 +75,9 @@ def is_active(service_name='tor.service', start=False):
                 return True
             return False
         return True
-    except _DBusException:
+    except _DBusException as e:
         # print(warn('Oops -> WSL not supported for this specific function'))
+        print(bad(f'Dbus Exception :/ -> {e}'))
         pass
     except Exception as err:
         print(bad(f'Error -> {err}'))
@@ -146,8 +149,8 @@ def bytify(object):
             object = bytify(str(object))
 
     else:
-        # print(warn('Expected object might not be returned'))
-        # If object type is unknown from above categories, THIS MIGHT BE AN ISSUE!
+        print(warn('Expected object might not be returned'))
+        # WARN: If object type is unknown from above categories, THIS MIGHT BE AN ISSUE!
         object = str(object).encode()
 
     return object

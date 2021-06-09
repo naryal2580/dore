@@ -1,2 +1,3 @@
 stoyled
 requests[socks]
+psutil

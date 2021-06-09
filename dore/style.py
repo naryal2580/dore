@@ -65,7 +65,7 @@ def random_animation(text, refresh_time=0.07):
     if random_chr.islower():
         txt[random_itr] = text[random_itr].upper()
     else:
-        txt[random_itr] = text[random_itr].upper()
+        txt[random_itr] = text[random_itr].lower()
     sleep(refresh_time)
     print(f"\r{''.join(txt)}", end='', flush=True)
 
