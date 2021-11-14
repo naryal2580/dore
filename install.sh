@@ -14,7 +14,9 @@ esac
 if [[ $machine == "Linux" ]]; then
     # CAUTION: TESTED ON Kali, Arch Linux with AUR and yay, Fedora
 
-    linux_type=$(cat /etc/*release | grep "^ID=" | cut -d '=' -f 2)
+    source /etc/os-release
+
+    linux_type=$NAME
 
     deps="psmisc dbus libdbus-glib-1-dev libdbus-1-dev python3-dbus git tor"
 
@@ -26,7 +28,7 @@ if [[ $machine == "Linux" ]]; then
 	    sudo pacman -Syu
 	    yay -S $deps --needed
 
-    elif [[ $linux_type == "fedora" ]]; then
+    elif [[ $linux_type == "Fedora" ]]; then
 	    sudo dnf install psmisc dbus-libs python3-dbus git tor -y
 
     elif [[ $1 == "--force" ]]; then
@@ -51,7 +53,7 @@ if [[ $machine == "Linux" ]]; then
     cd -
 
     cmd="sudo systemctl status tor"
-    echo -e "\n\n$cmd  # You might use start instead :)\n\n"
+    echo -e "\n\n$cmd  # You might use start instead =)\n\n"
     echo $($cmd)
 
 elif [[ $machine == "OSX" ]]; then
