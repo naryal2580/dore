@@ -12,7 +12,9 @@ esac
 
 
 if [[ $machine == "Linux" ]]; then
-    # CAUTION: TESTED ON Kali, Arch Linux with AUR and yay
+    # CAUTION: TESTED ON Kali, Arch Linux with AUR and yay, Fedora
+
+    linux_type=$(cat /etc/*release | grep "^ID=" | cut -d '=' -f 2)
 
     deps="psmisc dbus libdbus-glib-1-dev libdbus-1-dev python3-dbus git tor"
 
@@ -23,6 +25,9 @@ if [[ $machine == "Linux" ]]; then
     elif command -v yay &> /dev/null; then  # if it's an Arch, then you MUST have yay.
 	    sudo pacman -Syu
 	    yay -S $deps --needed
+
+    elif [[ $linux_type == "fedora" ]]; then
+	    sudo dnf install psmisc dbus-libs python3-dbus git tor -y
 
     elif [[ $1 == "--force" ]]; then
 	    echo -e "I assumed that you've managed to install a few dependencies: $deps\n"
@@ -61,7 +66,7 @@ elif [[ $machine == "OSX" ]]; then
     fi
 else
     echo "Unknown device: $machine"
-    echo "Please install the dependencies yourself."
+    echo "Please install the dependencies ($deps) yourself."
 fi
 
 sudo python3 -m pip install -U -r requirements.txt
